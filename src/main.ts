@@ -53,7 +53,6 @@ function boot() {
   $("btnPlay").onclick = () => { initAudio(); SFX.click(); beginMatchSetup(); };
   $("koStart").onclick = kickOff;
   $("koQuit").onclick = () => { SFX.click(); quitMatch(); };
-  $("tutGo").onclick = () => { initAudio(); SFX.click(); S.seenTutorial = true; save(); $("tutOverlay").classList.remove("show"); $("kickoffOverlay").classList.add("show"); };
 
   // pause
   $("pauseBtn").onclick = () => { if (!RT.running || RT.M.ended) return; RT.paused = true; $("pauseOverlay").classList.add("show"); SFX.click(); };
@@ -69,6 +68,7 @@ function boot() {
   $("swShake").onclick = () => { S.shake = !S.shake; $("swShake").classList.toggle("on", S.shake); save(); SFX.click(); };
   $("swSlowmo").onclick = () => { S.slowmo = !S.slowmo; $("swSlowmo").classList.toggle("on", S.slowmo); save(); SFX.click(); };
   $("btnRename").onclick = () => { const v = ($("clubNameInput") as HTMLInputElement).value.trim(); if (v) { S.clubName = v; save(); toast("Club renamed"); SFX.upgrade(); } };
+  $("btnReplayTut").onclick = () => { S.seenTutorial = false; save(); SFX.click(); toast("Tutorial will play in your next match"); };
   const btnReset = $("btnReset");
   btnReset.onclick = () => {
     if (btnReset.dataset.confirm === "1") {

@@ -110,6 +110,9 @@
       <input id="clubNameInput" maxlength="16" style="width:100%;height:48px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font-size:15px;font-weight:800;padding:0 14px;font-family:var(--ui)">
       <div style="height:14px"></div>
       <button class="btn ghost sm" id="btnRename">Save Name</button>
+      <div class="section-t">How To Play</div>
+      <button class="btn ghost sm" id="btnReplayTut">↺ Replay Tutorial</button>
+      <div class="dimtext" style="margin-top:8px;font-size:11px">Replays the on-pitch controls coaching at the start of your next match.</div>
       <div class="section-t">Danger Zone</div>
       <button class="btn danger" id="btnReset">Reset All Progress</button>
       <div class="dimtext" style="margin-top:16px;font-size:11px">Pocket Football Club · original arcade football · no real teams or players · plays with one thumb.</div>
@@ -154,17 +157,6 @@
       <div class="obj-pill" id="koObjective">Objective</div>
       <button class="btn" id="koStart" style="max-width:260px">Kick Off ⚽</button>
       <button class="btn ghost sm" id="koQuit" style="max-width:160px;margin-top:10px">Back</button>
-    </div>
-
-    <!-- tutorial overlay (first match) -->
-    <div class="overlay" id="tutOverlay">
-      <div class="leaguebadge" style="margin-bottom:12px">⚽ How To Play</div>
-      <div class="tut-card">
-        <div class="tut-row"><div class="tut-ic">👆</div><div><div class="tut-t">Quick Tap</div><div class="tut-d">Tap anywhere to pass, tackle or chase. Nail the timing ring for a perfect touch.</div></div></div>
-        <div class="tut-row"><div class="tut-ic">🫳</div><div><div class="tut-t">Drag To Aim a Strike</div><div class="tut-d">Near goal, time slows. Drag from the ball to aim — swipe a curve to bend it. Release to shoot.</div></div></div>
-        <div class="tut-row"><div class="tut-ic">🏆</div><div><div class="tut-t">Build Your Club</div><div class="tut-d">Win matches to earn coins, sign players and upgrade your way to World Stars.</div></div></div>
-      </div>
-      <button class="btn" id="tutGo" style="max-width:260px;margin-top:18px">Got it — Kick Off ⚽</button>
     </div>
 
     <!-- pause overlay -->

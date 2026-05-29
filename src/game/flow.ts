@@ -15,7 +15,6 @@ export function beginMatchSetup() {
   show("match");
   $("pauseOverlay").classList.remove("show");
   // No text wall — the controls are taught on-canvas during the first match.
-  $("tutOverlay").classList.remove("show");
   $("kickoffOverlay").classList.add("show");
   RT.paused = false; RT.running = false;
   resizeCanvas(); render(performance.now());
@@ -32,7 +31,6 @@ export function quitMatch() {
   if (RT.M) RT.M.aim = null; RT.pointerDown = false;
   $("kickoffOverlay").classList.remove("show");
   $("pauseOverlay").classList.remove("show");
-  $("tutOverlay").classList.remove("show");
   $("strikeVig").classList.remove("on"); $("strikeLbl").classList.remove("on"); resetStrikeHUD();
   clearRivalPreview();
   show("menu");
