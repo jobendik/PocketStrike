@@ -1,0 +1,17 @@
+{
+  "name": "pocket-football-club",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pocket Football Club — Strike Moments Edition. A one-thumb arcade football club game for mobile browser portals.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
