@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Pocket Football Club — a one-thumb arcade football club game. Build your squad, master drag-to-aim Strike Moments and climb from Street League to World Stars.">
+<title>Pocket Football Club</title>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===================== MENU ===================== -->
+  <section id="screen-menu" class="screen active">
+    <div id="topbar">
+      <div class="pill coins"><span class="ic">🪙</span><b id="tbCoins">0</b></div>
+      <div class="pill fans"><span class="ic">📣</span><b id="tbFans">0</b></div>
+      <div class="pill lvl"><span class="ic">⭐</span><b id="tbLvl">1</b></div>
+      <div class="grow"></div>
+      <div class="iconbtn" data-go="settings">⚙️</div>
+    </div>
+    <div class="scroll">
+      <div class="crestwrap">
+        <div class="crest" id="menuCrest"></div>
+        <div class="clubname" id="menuClubName">Pocket FC</div>
+        <div class="leaguebadge">⚽ <span id="menuLeague">Street League</span></div>
+      </div>
+      <button class="playbtn" id="btnPlay">Play Match<span class="sub" id="playSub">vs rival</span></button>
+      <div class="rowcards">
+        <div class="minicard"><div class="k">Rating</div><div class="v" id="menuRating">50</div></div>
+        <div class="minicard"><div class="k">Record</div><div class="v" id="menuRecord">0-0-0</div></div>
+        <div class="minicard"><div class="k">Streak</div><div class="v" id="menuStreak">–</div></div>
+      </div>
+      <div id="dailyCard"></div>
+      <div class="banner-card" id="chestCard">
+        <div class="bi">🎁</div>
+        <div><div class="bt">Match Chest</div><div class="bd" id="chestDesc">Play to earn rewards</div></div>
+        <div class="go" id="chestGo"></div>
+      </div>
+      <div style="margin:14px 16px 0">
+        <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px">
+          <span id="leagueProgLbl">League progress</span><span id="leagueProgVal"></span></div>
+        <div class="prog gold" id="leagueProgBar"><i style="width:0%"></i></div>
+      </div>
+      <div style="height:10px"></div>
+    </div>
+    <nav id="nav"></nav>
+  </section>
+
+  <!-- ===================== SQUAD ===================== -->
+  <section id="screen-squad" class="screen">
+    <div class="scroll pad-top">
+      <div class="h1">Squad</div>
+      <div class="sub1" id="squadSub">Your players</div>
+      <div class="section-t">Starting Four</div>
+      <div id="xiList"></div>
+      <div class="section-t">Bench</div>
+      <div id="benchList"></div>
+      <div style="height:8px"></div>
+    </div>
+    <nav id="nav2"></nav>
+  </section>
+
+  <!-- ===================== UPGRADES ===================== -->
+  <section id="screen-upgrades" class="screen">
+    <div class="scroll pad-top">
+      <div class="h1">Upgrades</div>
+      <div class="sub1">Boost your whole club</div>
+      <div id="upgradeList"></div>
+      <div style="height:8px"></div>
+    </div>
+    <nav id="nav3"></nav>
+  </section>
+
+  <!-- ===================== CLUB ===================== -->
+  <section id="screen-club" class="screen">
+    <div class="scroll pad-top">
+      <div class="h1">Club</div>
+      <div class="sub1" id="clubSub">Your journey to the top</div>
+      <div class="ucard" style="margin-bottom:14px">
+        <div class="top"><div class="ico">⭐</div>
+          <div><div class="nm">Club Level <span id="clubLvlNum" style="color:var(--home)">1</span></div>
+          <div class="ds" id="clubXpText">0 / 100 XP</div></div></div>
+        <div class="prog" style="margin-top:11px" id="clubXpBar"><i style="width:0%"></i></div>
+      </div>
+      <div class="section-t">Road to World Stars</div>
+      <div id="leagueLadder"></div>
+      <div class="section-t">Achievements</div>
+      <div id="achList"></div>
+      <div class="section-t">Rivals Beaten</div>
+      <div id="rivalList" class="tags-row" style="justify-content:flex-start;margin-left:0;margin-right:0"></div>
+      <div style="height:8px"></div>
+    </div>
+    <nav id="nav4"></nav>
+  </section>
+
+  <!-- ===================== SETTINGS ===================== -->
+  <section id="screen-settings" class="screen">
+    <div id="topbar2" style="padding:calc(var(--sat) + 12px) 14px 10px;display:flex;align-items:center;gap:10px">
+      <div class="iconbtn" data-go="menu">‹</div>
+      <div style="font-family:var(--disp);font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:.5px">Settings</div>
+    </div>
+    <div class="scroll">
+      <div class="toggle-row"><div><div class="tn">Sound & Music</div><div class="td">Crowd, kicks, goals</div></div><div class="sw on" id="swSound"></div></div>
+      <div class="toggle-row"><div><div class="tn">Screen Shake</div><div class="td">Impact on goals & shots</div></div><div class="sw on" id="swShake"></div></div>
+      <div class="toggle-row"><div><div class="tn">Slow-mo Goals</div><div class="td">Cinematic perfect goals</div></div><div class="sw on" id="swSlowmo"></div></div>
+      <div class="section-t">Club Name</div>
+      <input id="clubNameInput" maxlength="16" style="width:100%;height:48px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font-size:15px;font-weight:800;padding:0 14px;font-family:var(--ui)">
+      <div style="height:14px"></div>
+      <button class="btn ghost sm" id="btnRename">Save Name</button>
+      <div class="section-t">Danger Zone</div>
+      <button class="btn danger" id="btnReset">Reset All Progress</button>
+      <div class="dimtext" style="margin-top:16px;font-size:11px">Pocket Football Club · original arcade football · no real teams or players · plays with one thumb.</div>
+      <div style="height:12px"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MATCH ===================== -->
+  <section id="screen-match" class="screen">
+    <canvas id="gameCanvas"></canvas>
+    <div id="clutchVig"></div>
+    <div id="strikeVig"></div>
+    <div id="flash"></div>
+    <div id="strikeLbl"><span class="st-type" id="strikeType">DRIVE</span><span class="st-sub" id="strikeSub">Release to shoot</span></div>
+    <div class="hud" id="hudTop">
+      <div class="scoreboard">
+        <div class="sb-team home"><div class="tn" id="sbHomeName">YOU</div></div>
+        <div class="sb-score"><span id="sbHome">0</span><span class="dash">–</span><span id="sbAway">0</span></div>
+        <div class="sb-team away"><div class="tn" id="sbAwayName">RIVAL</div></div>
+      </div>
+    </div>
+    <div class="sb-time" id="sbTimeWrap" style="position:absolute;top:calc(var(--sat) + 10px);left:12px;z-index:6;background:rgba(6,12,22,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:5px 9px">
+      <div class="tt" id="sbTime">1:00</div><div class="tl">TIME</div>
+    </div>
+    <div class="iconbtn" id="pauseBtn" style="z-index:6">⏸</div>
+    <div class="hud" id="hudMeters">
+      <div class="mom-wrap"><div class="mom-fill home" id="momFill"></div><div class="mom-mark"></div></div>
+      <div class="metarow"><div class="flow-lbl dim" id="flowLbl">FLOW</div><div class="flow-wrap"><div class="flow-fill" id="flowFill"></div></div></div>
+    </div>
+    <div id="possWrap"><div id="possFill"></div></div>
+    <div class="hud" id="actionHint"><div class="chip" id="actionChip">Tap to pass</div><span class="taph" id="actionTaph">tap anywhere</span></div>
+    <div id="banner"><div class="bg" id="bannerText"></div></div>
+
+    <!-- kickoff overlay -->
+    <div class="overlay" id="kickoffOverlay">
+      <div class="leaguebadge" id="koLeague" style="margin-bottom:6px">LEAGUE</div>
+      <div class="matchup">
+        <div class="mu-team"><div class="mu-badge" id="koHomeBadge">Y</div><div class="mu-name" style="color:var(--home)" id="koHomeName">You</div><div class="mu-rating" id="koHomeRating">OVR 50</div></div>
+        <div class="mu-vs">VS</div>
+        <div class="mu-team"><div class="mu-badge" id="koAwayBadge">R</div><div class="mu-name" style="color:var(--away)" id="koAwayName">Rival</div><div class="mu-rating" id="koAwayRating">OVR 50</div><div class="playstyle-tag" id="koStyle"></div></div>
+      </div>
+      <div class="obj-pill" id="koObjective">Objective</div>
+      <button class="btn" id="koStart" style="max-width:260px">Kick Off ⚽</button>
+      <button class="btn ghost sm" id="koQuit" style="max-width:160px;margin-top:10px">Back</button>
+    </div>
+
+    <!-- tutorial overlay (first match) -->
+    <div class="overlay" id="tutOverlay">
+      <div class="leaguebadge" style="margin-bottom:12px">⚽ How To Play</div>
+      <div class="tut-card">
+        <div class="tut-row"><div class="tut-ic">👆</div><div><div class="tut-t">Quick Tap</div><div class="tut-d">Tap anywhere to pass, tackle or chase. Nail the timing ring for a perfect touch.</div></div></div>
+        <div class="tut-row"><div class="tut-ic">🫳</div><div><div class="tut-t">Drag To Aim a Strike</div><div class="tut-d">Near goal, time slows. Drag from the ball to aim — swipe a curve to bend it. Release to shoot.</div></div></div>
+        <div class="tut-row"><div class="tut-ic">🏆</div><div><div class="tut-t">Build Your Club</div><div class="tut-d">Win matches to earn coins, sign players and upgrade your way to World Stars.</div></div></div>
+      </div>
+      <button class="btn" id="tutGo" style="max-width:260px;margin-top:18px">Got it — Kick Off ⚽</button>
+    </div>
+
+    <!-- pause overlay -->
+    <div class="overlay" id="pauseOverlay">
+      <div class="big">Paused</div>
+      <button class="btn" id="pResume" style="max-width:240px">Resume</button>
+      <button class="btn ghost sm" id="pQuit" style="max-width:200px;margin-top:10px">Quit Match</button>
+    </div>
+  </section>
+
+  <!-- ===================== RESULT ===================== -->
+  <section id="screen-result" class="screen">
+    <div class="scroll" style="padding:0 0 16px">
+      <div class="res-hero">
+        <div class="res-kind win" id="resKind">VICTORY</div>
+        <div class="res-score" id="resScore">0–0</div>
+        <div class="res-line" id="resLine"></div>
+      </div>
+      <div class="tags-row" id="resTags"></div>
+      <div class="motm" id="motmCard">
+        <div class="mb" id="motmBadge">9</div>
+        <div><div class="ml">★ Man of the Match</div><div class="mn" id="motmName">Player</div><div class="ms" id="motmStat"></div></div>
+      </div>
+      <div class="obj-result" id="objResult">
+        <div class="oi" id="objIcon">🎯</div>
+        <div><div class="ot" id="objTitle">Objective</div><div class="od" id="objDesc"></div></div>
+        <div class="ostat" id="objStat"></div>
+      </div>
+      <div class="rew-grid">
+        <div class="rew"><div class="ri">🪙</div><div class="rv" id="resCoins">+0</div><div class="rl">Coins</div></div>
+        <div class="rew"><div class="ri">📣</div><div class="rv" id="resFans">+0</div><div class="rl">Fans</div></div>
+        <div class="rew"><div class="ri">⭐</div><div class="rv" id="resXp">+0</div><div class="rl">Club XP</div></div>
+      </div>
+      <div id="resExtra" style="margin:12px 16px 0"></div>
+      <div style="margin:18px 16px 0" class="row2">
+        <button class="btn ghost" id="resHome" style="flex:1">Home</button>
+        <button class="btn" id="resAgain" style="flex:1.4">Play Again</button>
+      </div>
+      <div style="height:8px"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SCOUT ===================== -->
+  <section id="screen-scout" class="screen">
+    <div class="center-col">
+      <div class="leaguebadge" style="margin-bottom:14px">🔍 Scout Report</div>
+      <div class="big" style="font-family:var(--disp);font-weight:900;font-size:26px;text-transform:uppercase" id="scoutTitle">New Talent Found</div>
+      <div class="dimtext" id="scoutSub" style="margin:6px 0 4px;max-width:300px">Pick one player to join your squad</div>
+      <div class="scout-row" id="scoutCards"></div>
+      <button class="btn ghost sm" id="scoutSkip" style="max-width:180px;margin-top:22px;display:none">Continue</button>
+    </div>
+  </section>
+
+  <!-- ===================== CHEST ===================== -->
+  <section id="screen-chest" class="screen">
+    <div class="center-col">
+      <div class="leaguebadge gold" style="margin-bottom:18px;background:rgba(255,210,63,.12);border-color:rgba(255,210,63,.35);color:var(--gold)">🎁 Match Chest</div>
+      <div id="chestStage"></div>
+      <div class="big" id="chestTitle" style="font-family:var(--disp);font-weight:900;font-size:24px;text-transform:uppercase;margin-top:20px">Tap to open</div>
+      <div id="chestReward" style="margin-top:10px;min-height:30px"></div>
+      <button class="btn" id="chestContinue" style="max-width:220px;margin-top:24px;display:none">Awesome!</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
