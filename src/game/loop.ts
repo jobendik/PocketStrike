@@ -1,8 +1,8 @@
 /* ============================================================
    Main RAF loop, match update orchestration and live HUD
    ============================================================ */
-import { $, clamp, lerp, fmtTime, rand } from "../core/utils";
-import { CFG, PITCH, AIM_SLOW } from "../core/config";
+import { $, clamp, lerp, fmtTime } from "../core/utils";
+import { CFG, AIM_SLOW } from "../core/config";
 import { SFX } from "../audio/audio";
 import { RT } from "./runtime";
 import { tapQuality } from "./geometry";
@@ -14,6 +14,7 @@ import { dramaTick, updateMeters, banner } from "./drama";
 import { updateFX } from "./fx";
 import { render } from "./render";
 import { endMatch } from "./result";
+import { tutUpdate, tutIsWaiting, tutIsActive } from "./tutorial";
 
 export function startLoop() { if (RT.rafId) cancelAnimationFrame(RT.rafId); RT.lastT = performance.now(); RT.running = true; RT.paused = false; RT.rafId = requestAnimationFrame(frame); }
 export function stopLoop() { RT.running = false; if (RT.rafId) cancelAnimationFrame(RT.rafId); RT.rafId = 0; }
@@ -40,14 +41,11 @@ function updateMatch(dt: number, realDt: number) {
   M.timing.phase = (M.timing.t / 0.9) % 1;
   if (M.aim && M.aim.hasBall) M.ring.t = (M.ring.t + realDt / 0.7) % 1;
 
-  if (M.forceStrike === 1 && M.kickoffLock <= 0 && !M.celebrate) {
-    M.forceT -= realDt;
-    if (M.forceT <= 0) {
-      const st = M.home.find(p => p.role === "ST");
-      if (st) { st.x = clamp(PITCH.cx + rand(-26, 26), PITCH.left + 30, PITCH.right - 30); st.y = PITCH.top + 118; gainPossession(st); st.decT = 3.0; banner("STRIKE MOMENT! DRAG TO AIM", "bn-chance", 7); }
-      M.forceStrike = 2;
-    }
-  }
+  // drive the first-match on-canvas tutorial state machine
+  if ((M.tutGoalWindow || 0) > 0) M.tutGoalWindow = (M.tutGoalWindow as number) - realDt;
+  tutUpdate(realDt);
+  const tutWait = tutIsWaiting();   // a coached prompt is open -> freeze the sim
+  const tutActive = tutIsActive();  // clock + auto-play paused for the whole lesson
 
   if (M.kickoffLock > 0) {
     M.kickoffLock -= realDt;
@@ -59,28 +57,30 @@ function updateMatch(dt: number, realDt: number) {
   }
   if (M.celebrate) { M.celebrate.t -= realDt; if (M.celebrate.t <= 0) M.celebrate = null; }
 
-  if (M.kickoffLock <= 0 && !M.celebrate) M.timeLeft -= dt;
-  if (M.timeLeft <= 0) { M.timeLeft = 0; $("sbTime").textContent = "0:00"; endMatch(); return; }
-  if (M.timeLeft <= CFG.clutchTime && !M.clutchOn) {
-    M.clutchOn = true; banner("CLUTCH TIME", "bn-clutch", 6);
-    $("sbTimeWrap").classList.add("clutch"); $("clutchVig").classList.add("on"); SFX.tension();
+  if (!tutWait) {
+    if (M.kickoffLock <= 0 && !M.celebrate && !tutActive) M.timeLeft -= dt;
+    if (M.timeLeft <= 0) { M.timeLeft = 0; $("sbTime").textContent = "0:00"; endMatch(); return; }
+    if (M.timeLeft <= CFG.clutchTime && !M.clutchOn) {
+      M.clutchOn = true; banner("CLUTCH TIME", "bn-clutch", 6);
+      $("sbTimeWrap").classList.add("clutch"); $("clutchVig").classList.add("on"); SFX.tension();
+    }
+    if (M.clutchOn && (M.frame as number) % 80 === 0) SFX.tension();
+
+    aiAutoAction(dt);
+    updateAITargets(dt);
+    for (const p of M.players) movePlayer(p, dt);
+    separatePlayers();
+    updateBall(dt);
+    antiStuck(realDt);
+
+    if (M.ball.owner) { const tgt = M.ball.owner.team === "home" ? 1 : 0; M.poss = lerp(M.poss, tgt, clamp(dt * 0.5, 0, 1)); }
+    if ((M.frame as number) % 30 === 0) { M.flow = clamp(M.flow - 1.2, 0, 100); M.flowTier = M.flow >= 100 ? 3 : M.flow >= 67 ? 2 : M.flow >= 34 ? 1 : 0; }
   }
-  if (M.clutchOn && (M.frame as number) % 80 === 0) SFX.tension();
-
-  aiAutoAction(dt);
-  updateAITargets(dt);
-  for (const p of M.players) movePlayer(p, dt);
-  separatePlayers();
-  updateBall(dt);
-  antiStuck(realDt);
-
-  if (M.ball.owner) { const tgt = M.ball.owner.team === "home" ? 1 : 0; M.poss = lerp(M.poss, tgt, clamp(dt * 0.5, 0, 1)); }
-  if ((M.frame as number) % 30 === 0) { M.flow = clamp(M.flow - 1.2, 0, 100); M.flowTier = M.flow >= 100 ? 3 : M.flow >= 67 ? 2 : M.flow >= 34 ? 1 : 0; }
 
   computeContext();
   updateHint();
   updateStrikeHUD();
-  dramaTick(dt);
+  if (!tutActive) dramaTick(dt);
   updateFX(dt);
   updateMeters();
   ($("flash") as HTMLElement).style.opacity = String(clamp(M.flashV || 0, 0, 0.85));

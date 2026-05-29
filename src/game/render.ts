@@ -11,6 +11,7 @@ import { RT } from "./runtime";
 import { awayGoalY, tapQuality } from "./geometry";
 import { bestPassTarget } from "./actions";
 import { computeCurve } from "./input";
+import { tutDraw } from "./tutorial";
 
 export function resizeCanvas() {
   const r = document.getElementById("stage")!.getBoundingClientRect();
@@ -40,13 +41,15 @@ export function render(t: number) {
   worldTransform();
   drawPitch(t);
   const aiming = M.aim && M.aim.hasBall;
-  if (aiming) { ctx.fillStyle = "rgba(3,9,15,0.40)"; ctx.fillRect(0, 0, VW, VH); }
+  const tutFocus = !!(M.tut && M.tut.active && M.tut.waiting);
+  if (aiming || tutFocus) { ctx.fillStyle = "rgba(3,9,15,0.40)"; ctx.fillRect(0, 0, VW, VH); }
   drawPreviews();
   drawPlayers();
   drawBall();
   if (aiming) drawAim();
   drawTimingRing();
   drawFX();
+  tutDraw();
 }
 
 function rrect(x: number, y: number, w: number, h: number, rd: number) {

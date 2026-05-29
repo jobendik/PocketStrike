@@ -2,7 +2,6 @@
    Match flow: pre-match card, kickoff and quitting
    ============================================================ */
 import { $ } from "../core/utils";
-import { S } from "../state/save";
 import { initAudio, SFX, setCrowd } from "../audio/audio";
 import { show, previewRival, clearRivalPreview } from "../ui/ui";
 import { RT } from "./runtime";
@@ -15,8 +14,9 @@ export function beginMatchSetup() {
   setupMatch();
   show("match");
   $("pauseOverlay").classList.remove("show");
-  if (!S.seenTutorial) { $("tutOverlay").classList.add("show"); $("kickoffOverlay").classList.remove("show"); }
-  else { $("tutOverlay").classList.remove("show"); $("kickoffOverlay").classList.add("show"); }
+  // No text wall — the controls are taught on-canvas during the first match.
+  $("tutOverlay").classList.remove("show");
+  $("kickoffOverlay").classList.add("show");
   RT.paused = false; RT.running = false;
   resizeCanvas(); render(performance.now());
 }

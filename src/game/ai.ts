@@ -31,6 +31,8 @@ export function updateAITargets(_dt: number) {
 
     if (p.role === "GK") {
       const gy = defendY(p.team);
+      // during the tutorial goal window keep the away keeper parked at the near post
+      if (p.team === "away" && (M.tutGoalWindow || 0) > 0) { p.tx = PITCH.cx - 24; p.ty = gy + 10; continue; }
       let tx = Math.max(PITCH.cx - 52 + 8, Math.min(b.x, PITCH.cx + 52 - 8));
       let ty = gy + (p.team === "home" ? -10 : 10);
       const ballNear = Math.abs(b.y - gy) < 150 && Math.abs(b.x - PITCH.cx) < 150;
@@ -89,6 +91,7 @@ export function updateAITargets(_dt: number) {
 export function aiAutoAction(dt: number) {
   const M = RT.M;
   if (M.aim && M.aim.hasBall) return;   // player is aiming a strike
+  if (M.tut && M.tut.active) return;    // tutorial drives the ball itself
   const b = M.ball; if (!b.owner) return;
   const o = b.owner;
   o.decT = (o.decT || 0) - dt;

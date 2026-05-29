@@ -97,6 +97,7 @@ export function tryGoalSave(b: Ball, defTeam: Team): boolean {
   const gy = defendY(defTeam);
   let reach = 20 + gk.f.def * 22 + (gk.saveBoost || 0) * 40;
   if (defTeam === "home") reach += upgradeBonus().gk;
+  if (defTeam === "away" && (M.tutGoalWindow || 0) > 0) reach *= 0.3; // reward the tutorial strike
   const d = dist(gk.x, gk.y, b.x, b.y);
   if (b.chip && b.height > 7) return false;
   if (d < reach) {

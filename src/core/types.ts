@@ -94,6 +94,15 @@ export interface MatchStat {
 
 export interface BestMoment { tag: string; name: string; rank: number; }
 
+export interface TutState {
+  active: boolean;
+  step: "intro" | "tap" | "tapDone" | "strike" | "done";
+  waiting: boolean;   // true while a coached prompt is open and the sim is frozen
+  handT: number;      // animation timer for the ghost hand
+  t: number;          // generic transition timer
+  holder: MatchPlayer | null;
+}
+
 export interface MatchState {
   homeScore: number; awayScore: number;
   timeLeft: number; elapsed: number;
@@ -102,6 +111,8 @@ export interface MatchState {
   timing: { phase: number; t: number };
   aim: AimState | null; ring: { t: number };
   forceStrike: number; forceT: number;
+  tut: TutState | null;
+  tutGoalWindow?: number;
   bestMoment: BestMoment | null;
   momentum: number; flow: number; passStreak: number; flowTier: number;
   poss: number;

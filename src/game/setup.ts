@@ -12,6 +12,7 @@ import { RT } from "./runtime";
 import { formationPos } from "./geometry";
 import { resizeCanvas } from "./render";
 import { updateMeters } from "./drama";
+import { makeTut } from "./tutorial";
 
 function genOpponent(role: Position, rating: number): Player {
   const base = clamp(rating, 25, 95);
@@ -80,7 +81,8 @@ export function setupMatch() {
     ball: { x: PITCH.cx, y: PITCH.cy, vx: 0, vy: 0, owner: null, lockT: 0.4, height: 0, vz: 0, spin: 0, lastKicker: null, shot: false, chip: false, quality: "", shotType: "", shotDist: 0, fromTeam: null, trail: [], rot: 0 },
     timing: { phase: 0, t: 0 },
     aim: null, ring: { t: 0 },
-    forceStrike: S.totalMatches === 0 ? 1 : 0, forceT: 3.2,
+    forceStrike: 0, forceT: 3.2,
+    tut: makeTut(),
     bestMoment: null,
     momentum: 0, flow: 0, passStreak: 0, flowTier: 0,
     poss: 0.5,
